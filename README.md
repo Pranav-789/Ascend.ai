@@ -113,7 +113,7 @@ Ascend AI is an AI-powered platform designed to help job seekers optimize their 
 # 📂 Repository Structure
 
 ```text
-frontend/
+ascend-ai/
 backend/
 ```
 
@@ -124,9 +124,9 @@ backend/
 ## Clone the Repository
 
 ```bash
-git clone https://github.com/yourusername/ascend-ai.git
+git clone https://github.com/Pranav-789/Ascend.ai.git
 
-cd ascend-ai
+cd Ascend.ai
 ```
 
 ---
@@ -172,7 +172,7 @@ uvicorn app.main:app --reload
 ## Frontend
 
 ```bash
-cd frontend
+cd ascend-ai
 
 npm install
 
