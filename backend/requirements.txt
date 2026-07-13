@@ -8,3 +8,5 @@ pydantic
 pydantic-settings
 python-dotenv
 fastapi-mail
+redis
+resend

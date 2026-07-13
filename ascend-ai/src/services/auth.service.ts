@@ -47,4 +47,8 @@ export const authService = {
 
   logout: () =>
     apiClient.post(`${API.AUTH}/logout`),
+
+  requestResendVerification: (payload: EmailPayload) => {
+    apiClient.post(`${API.AUTH}/resend-verification-email`, payload);
+  }
 };

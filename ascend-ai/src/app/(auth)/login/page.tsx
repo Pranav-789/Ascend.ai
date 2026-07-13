@@ -115,6 +115,12 @@ export default function LoginPage() {
                 Sign up
               </Link>
             </div>
+            <div className="text-center text-sm">
+              Resend Verification Mail?{" "}
+              <Link href="/resend-verification" className="text-blue-600 hover:underline">
+                Resend
+              </Link>
+            </div>
           </CardFooter>
         </form>
       </Card>

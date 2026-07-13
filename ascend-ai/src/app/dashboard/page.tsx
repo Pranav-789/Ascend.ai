@@ -1,6 +1,6 @@
 "use client";
 
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { useRouter } from "next/navigation";
 import { useAuthStore } from "@/store/auth.store";
 import { authService } from "@/services/auth.service";
@@ -11,12 +11,21 @@ import { Card, CardContent, CardDescription, CardHeader, CardTitle } from "@/com
 export default function DashboardPage() {
   const { user, authenticated, loading, logout } = useAuthStore();
   const router = useRouter();
+  const [isMounted, setIsMounted] = useState(false);
+
+  // Local hydration check specific to this protected route
+  useEffect(() => {
+    // Avoid synchronous state updates inside effect for strict linters
+    const timer = setTimeout(() => setIsMounted(true), 0);
+    return () => clearTimeout(timer);
+  }, []);
 
   useEffect(() => {
-    if (!loading && !authenticated) {
+    // Only redirect if we are fully loaded on the client and definitely not authenticated
+    if (isMounted && !loading && !authenticated) {
       router.push("/login");
     }
-  }, [loading, authenticated, router]);
+  }, [isMounted, loading, authenticated, router]);
 
   const handleLogout = async () => {
     try {
@@ -29,14 +38,16 @@ export default function DashboardPage() {
     }
   };
 
-  if (loading) {
+  // 1. Prevent hydration mismatches and flashes by rendering a skeleton or null locally
+  if (!isMounted || loading) {
     return (
       <div className="flex min-h-screen items-center justify-center">
-        <p className="text-lg">Loading...</p>
+        <p className="animate-pulse text-lg">Loading dashboard...</p>
       </div>
     );
   }
 
+  // 2. Security net: don't render the dashboard content if unauthenticated
   if (!authenticated) {
     return null; // Will redirect in useEffect
   }

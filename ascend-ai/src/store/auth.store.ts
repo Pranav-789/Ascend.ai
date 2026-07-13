@@ -16,11 +16,22 @@ interface AuthStore{
     logout: () => void;
 }
 
-export const useAuthStore = create<AuthStore>()((set) => ({
-    user: null,
-    loading: true,
-    authenticated: false,
-    setUser: (user) => set({ user, authenticated: !!user }),
-    setLoading: (loading) => set({ loading }),
-    logout: () => set({ user: null, authenticated: false }),
-}));
+export const useAuthStore = create<AuthStore>()(
+    persist(
+        (set) => ({
+            user: null,
+            loading: true,
+            authenticated: false,
+            setUser: (user) => (set({user, authenticated: !!user})),
+            setLoading: (loading) => (set({loading})),
+            logout: () => (set({user: null, authenticated: false}))
+        }),
+        {
+            name: "auth-storgae",
+            partialize: (state) => ({
+                user: state.user,
+                authenticated: state.authenticated
+            })
+        }
+    )
+);

@@ -2,25 +2,18 @@
 
 import { useEffect } from "react";
 import { useAuthStore } from "@/store/auth.store";
-import { userService } from "@/services/user.service";
 
 export function AuthProvider({ children }: { children: React.ReactNode }) {
-  const { setUser, setLoading } = useAuthStore();
+  const { setLoading } = useAuthStore();
 
   useEffect(() => {
-    const initAuth = async () => {
-      try {
-        const user = await userService.me();
-        setUser(user);
-      } catch (error) {
-        setUser(null);
-      } finally {
-        setLoading(false);
-      }
-    };
+    // By the time this effect runs on the client, Zustand's persist middleware 
+    // has already synchronized with localStorage. 
+    // We instantly unblock the global loading state without any setTimeout hacks.
+    setLoading(false);
+  }, [setLoading]);
 
-    initAuth();
-  }, [setUser, setLoading]);
-
+  // We return children immediately, completely unblocking Server-Side Rendering (SSR).
+  // Public pages (like marketing/landing) will now load instantly for users and SEO crawlers.
   return <>{children}</>;
 }
