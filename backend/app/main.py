@@ -1,4 +1,5 @@
 import time
+import uvicorn
 from fastapi import FastAPI, Depends, Request, HTTPException
 from fastapi.responses import JSONResponse
 from fastapi.middleware.cors import CORSMiddleware
@@ -102,3 +103,6 @@ def health_check():
             "message": f"{app.title} server is up and running on specified end point"
         }
     )
+
+if __name__ == "__main__":
+    uvicorn.run(app, host="127.0.0.1", port=8000)
